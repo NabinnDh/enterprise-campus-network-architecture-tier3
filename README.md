@@ -108,6 +108,4 @@ Rather than focusing on individual commands, the objective was to build a cohesi
 * DHCP Snooping
 * Dynamic ARP Inspection
 
-## License
 
-This project is available under the MIT License.
