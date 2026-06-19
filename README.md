@@ -2,110 +2,138 @@
 
 ## Overview
 
-This repository contains a complete enterprise campus network built in Cisco Packet Tracer using a three-tier hierarchical design. The project was created as a practical exercise to apply routing, switching, redundancy, security, and infrastructure services in a single integrated environment rather than as isolated lab tasks.
+This project showcases the design and implementation of a three-tier enterprise campus network in Cisco Packet Tracer. Rather than configuring individual technologies in isolation, the goal was to build a complete and interconnected environment where routing, switching, security, redundancy, wireless networking, and infrastructure services work together as they would in a real organization.
 
-The topology connects two office locations through redundant core infrastructure and dual Internet links while providing reliable connectivity for wired clients, wireless users, IP phones, and internal servers. The design emphasizes availability, scalability, and maintainability, following concepts commonly used in enterprise networks.
+The topology represents two office locations connected through redundant core infrastructure and dual Internet providers. User devices, IP phones, wireless clients, and servers are placed into dedicated VLANs, allowing traffic to be segmented, secured, and managed efficiently while maintaining high availability across the network.
 
-## Network Design
+---
 
-The environment is organized into Core, Distribution, and Access layers to separate responsibilities and simplify management.
+## Network Topology
 
-Key components include:
+![Enterprise Campus Topology](topology/Topology_Overview.png)
 
-* Redundant Internet connectivity through two ISPs
-* An edge router providing WAN access and NAT services
-* Dual Core Switches interconnected with a Layer 3 EtherChannel
-* Distribution switches for Office A and Office B
-* Multiple Access Switches serving end devices
-* Wireless LAN Controller and Lightweight Access Points
-* Centralized server providing network services
-* Segregated user, voice, wireless, server, and management VLANs
+The network follows a classic three-tier architecture consisting of Core, Distribution, and Access layers.
 
-The complete topology diagram is available in the `topology` directory.
+* **Core Layer** – Provides high-speed Layer 3 forwarding between major sections of the network and maintains resilient connectivity through a Layer 3 EtherChannel.
+* **Distribution Layer** – Performs inter-VLAN routing, enforces routing policies, and provides gateway redundancy using HSRP so that end users continue to operate even if a distribution switch becomes unavailable.
+* **Access Layer** – Connects end devices including PCs, IP phones, lightweight access points, and servers while applying security controls such as Port Security, DHCP Snooping, and Dynamic ARP Inspection.
 
-## Implemented Features
+The design also includes dual ISP connectivity, allowing Internet access to continue through an alternate path if the primary connection fails.
 
-This project combines a wide range of enterprise networking technologies into a single working design, including:
+---
 
-* VLAN creation and segmentation
-* IEEE 802.1Q trunking
-* VTP domain configuration
-* Layer 2 EtherChannel using both PAgP and LACP
-* Layer 3 EtherChannel between Core Switches
-* Inter-VLAN routing
-* HSRPv2 for default gateway redundancy
-* Rapid PVST+ with root bridge optimization
-* OSPF dynamic routing across Layer 3 devices
-* Static and floating default routes
-* DHCP and DHCP relay
-* DNS, NTP, SNMP, and Syslog services
-* Secure remote administration using SSH
-* Static NAT and dynamic PAT
-* IPv4 and IPv6 dual-stack configuration
-* Wireless LAN Controller integration with WPA2 security
-* Extended ACLs for traffic filtering
-* Port Security
-* DHCP Snooping
-* Dynamic ARP Inspection (DAI)
+## Network Design Highlights
 
-## Validation
+The topology was planned to reflect common enterprise networking practices rather than a minimal lab environment.
 
-Every major feature was configured and verified through CLI commands and functional testing. The `screenshots` directory contains command outputs and verification images covering:
+* Redundant Internet connectivity through two ISP links
+* Dedicated Core, Distribution, and Access switching layers
+* Layer 2 and Layer 3 EtherChannels to increase bandwidth and eliminate single points of failure
+* Separate VLANs for user devices, voice traffic, wireless clients, servers, and network management
+* High availability through HSRP with carefully aligned spanning-tree root bridge placement
+* Wireless integration using a Wireless LAN Controller and Lightweight Access Points
+* Centralized services including DHCP, DNS, NTP, Syslog, SNMP, FTP, and SSH
 
-* Interface status
-* VLAN assignments
-* EtherChannel operation
-* Trunk configuration
-* HSRP state
-* OSPF neighbors and learned routes
-* Routing tables
-* DHCP bindings
+---
+
+## Technical Implementation
+
+### Switching and Segmentation
+
+VLANs were used to logically separate different categories of devices and reduce unnecessary broadcast traffic. Trunk links carry multiple VLANs between switches, while VTP simplifies VLAN management across the switching infrastructure. EtherChannel bundles multiple physical links into a single logical interface to improve both throughput and resiliency.
+
+### Routing and Redundancy
+
+Inter-VLAN communication is provided by the Distribution layer, while OSPF dynamically exchanges routes between Layer 3 devices. HSRP supplies redundant default gateways so clients maintain connectivity during device failures. Static default routes and floating backup routes provide Internet failover between the two WAN connections.
+
+### Infrastructure Services
+
+The network includes centralized DHCP address assignment, DNS name resolution, NTP time synchronization, SNMP monitoring capabilities, Syslog message collection, secure SSH administration, and NAT/PAT for communication with external networks.
+
+### Wireless Networking
+
+Wireless connectivity is managed through a Wireless LAN Controller with Lightweight Access Points operating under centralized control. A dedicated wireless VLAN and WPA2 security configuration provide segmented and authenticated access for wireless clients.
+
+### Security
+
+Several security mechanisms were implemented to protect the access layer and management plane:
+
+* Extended Access Control Lists to restrict unnecessary traffic
+* Port Security to prevent unauthorized devices from connecting
+* DHCP Snooping to block rogue DHCP servers
+* Dynamic ARP Inspection to mitigate ARP spoofing attacks
+* SSH-only remote administration for secure device management
+
+### IPv6
+
+The project also includes dual-stack IPv4/IPv6 deployment with IPv6 addressing and static routing to demonstrate readiness for modern enterprise environments while maintaining compatibility with existing IPv4 services.
+
+---
+
+## Validation and Testing
+
+After configuration, each major component of the network was verified through operational testing and CLI validation. The `screenshots` directory contains evidence confirming successful implementation of:
+
+* VLAN creation and trunk operation
+* Layer 2 and Layer 3 EtherChannels
+* HSRP active and standby states
+* OSPF neighbor relationships and learned routes
+* Routing table population
+* DHCP address allocation
 * NAT translations
-* IPv6 interfaces
+* IPv6 interface configuration
 * Port Security
 * DHCP Snooping
 * Dynamic ARP Inspection
-* SSH connectivity
+* SSH remote access
 * Wireless LAN Controller configuration
-* Wi-Fi security settings
+* Wireless security settings
+
+---
 
 ## Repository Structure
 
 ```text
 enterprise-campus-network-architecture/
-├── docs/
 ├── packet-tracer/
+│   └── Enterprise-Campus-Network.pkt
 ├── screenshots/
+│   └── Verification screenshots
 ├── topology/
+│   └── Topology_Overview.png
 ├── README.md
 └── LICENSE
 ```
 
-## Skills Applied
+---
 
-Developing this project required planning and implementing multiple networking disciplines within a single environment, including enterprise switching, dynamic routing, gateway redundancy, infrastructure services, wireless networking, IPv6 deployment, network security, and troubleshooting.
-
-Rather than focusing on individual commands, the objective was to build a cohesive and resilient campus network where all components operate together as a complete system.
-
-## Technologies
+## Technologies Used
 
 * Cisco Packet Tracer
 * Cisco IOS
-* OSPF
-* HSRP
-* VLANs
-* EtherChannel
+* VLANs and IEEE 802.1Q Trunking
+* VTP
+* EtherChannel (PAgP and LACP)
 * Rapid PVST+
-* NAT/PAT
-* DHCP
+* OSPF
+* HSRPv2
+* DHCP and DHCP Relay
 * DNS
+* NTP
 * SNMP
 * Syslog
+* FTP
 * SSH
-* IPv6
+* Static NAT and Dynamic PAT
+* IPv4 and IPv6
 * Wireless LAN Controller (WLC)
+* Access Control Lists (ACLs)
 * Port Security
 * DHCP Snooping
-* Dynamic ARP Inspection
+* Dynamic ARP Inspection (DAI)
 
+---
 
+## Project Objective
+
+The purpose of this project was to design and validate a resilient enterprise network that combines routing, switching, redundancy, security, wireless networking, and infrastructure services into a single cohesive solution. It serves as a practical demonstration of enterprise networking concepts and hands-on Cisco configuration skills using Cisco Packet Tracer.
